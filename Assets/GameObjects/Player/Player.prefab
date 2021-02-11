@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6861783344059807577}
   - component: {fileID: 6861783344059807578}
   - component: {fileID: 3316790462180762972}
+  - component: {fileID: 1864063921143704278}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,11 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   horizontalPosition: 0
-  radius: 6
+  maxMovement: 0.6
   movementMultiplier: 7
   rotationSpeed: 0.01
   movementSpeed: 20
-  maxMovement: 0.6
+  radius: 6
+  restPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &3316790462180762972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,6 +65,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d00881e59d50ef2499e87f10ff9e7b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positionOffset: {x: 0, y: 5, z: -5}
+  eulerAngleOffset: {x: 30, y: 0, z: 0}
+  angleMultiplier: 3.1415927
+--- !u!114 &1864063921143704278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861783344059807576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3534817d1ddc4334faf6246b2008bcae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slideController: {fileID: 0}
+  distance: 0
+  speed: 1
 --- !u!1 &6861783345053373760
 GameObject:
   m_ObjectHideFlags: 0
