@@ -9,28 +9,43 @@ public class SlideController : MonoBehaviour
     public float maxAngle = 1f;
     public List<SlideSection> sections;
 
+    public int forwardBufferSections = 5; 
+    public float centerProgress = 0;
+    int generatedSections = 0;
+    float lastAngle = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         sections = new List<SlideSection>();
 
-        GameObject node1 = Instantiate(slideSectionPrefab, transform);
-        node1.transform.position = Vector3.zero;
-        sections.Add(node1.GetComponent<SlideSection>());
-        GameObject node2 = Instantiate(slideSectionPrefab, transform);
-        node2.transform.position = Vector3.forward;
-        sections.Add(node2.GetComponent<SlideSection>());
+        NewNode(Vector3.zero);
+        NewNode(Vector3.one);
+        UpdateSlide();
+    }
 
-        float lastAngle = 0;
+    private void Update()
+    {
+        UpdateSlide(); 
+    }
 
-        for (int i = 2; i < 100; i++)
+    void UpdateSlide()
+    {
+        while (generatedSections < centerProgress + forwardBufferSections)
         {
-            lastAngle += maxAngle * RandomUnsignedFloat();
-
-            GameObject node = Instantiate(slideSectionPrefab, transform);
-            node.transform.position = sections[i - 1].gameObject.transform.position + new Vector3(Mathf.Sin(lastAngle), 0, Mathf.Cos(lastAngle));
-            sections.Add(node.GetComponent<SlideSection>());
+            lastAngle += maxAngle * RandomSignedFloat();
+            Vector3 change = new Vector3(Mathf.Sin(lastAngle), 0, Mathf.Cos(lastAngle)) * (RandomUnsignedFloat() * sectionLengthRange.difference + sectionLengthRange.min);
+            NewNode(sections[generatedSections - 1].gameObject.transform.position + change);
         }
+    }
+
+    GameObject NewNode(Vector3 position)
+    {
+        GameObject node = Instantiate(slideSectionPrefab, transform);
+        node.transform.position = position;
+        sections.Add(node.GetComponent<SlideSection>());
+        generatedSections += 1;
+        return node;
     }
 
     public Vector3 GetPositionOnSlide(float d)
@@ -71,6 +86,11 @@ public class SlideController : MonoBehaviour
 
     float RandomUnsignedFloat()
     {
+        return Mathf.Abs(RandomSignedFloat());
+    }
+
+    float RandomSignedFloat()
+    {
         return Random.Range(-1000, 1000) / 1000f;
     }
 }
@@ -82,6 +102,7 @@ public class Range
     public float min;
     [SerializeField]
     public float max;
+    public float difference { get { return max - min;  } }
 
     public Range(float min, float max)
     {

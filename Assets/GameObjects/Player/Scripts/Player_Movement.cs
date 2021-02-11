@@ -18,6 +18,7 @@ public class Player_Movement : MonoBehaviour
         float angle = slideController.GetAngleOnSlide(slidePosition.y);
         transform.position = restPosition;
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, angle, transform.localEulerAngles.z);
+        slideController.centerProgress = slidePosition.y;
     }
 
     void UpdateHorizontalMovement()
