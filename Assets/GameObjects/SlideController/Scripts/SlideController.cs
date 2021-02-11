@@ -5,11 +5,12 @@ using UnityEngine;
 public class SlideController : MonoBehaviour
 {
     public GameObject slideSectionPrefab;
-    public Range sectionLengthRange = new Range(1, 2);
+    public float sectionLength = 5;
     public float maxAngle = 1f;
     public List<SlideSection> sections;
 
     public int forwardBufferSections = 5; 
+    public int rearBufferSections = 5; 
     public float centerProgress = 0;
     int generatedSections = 0;
     float lastAngle = 0;
@@ -31,27 +32,46 @@ public class SlideController : MonoBehaviour
 
     void UpdateSlide()
     {
+        // Generate new sections
         while (generatedSections < centerProgress + forwardBufferSections)
         {
             lastAngle += maxAngle * RandomSignedFloat();
-            Vector3 change = new Vector3(Mathf.Sin(lastAngle), 0, Mathf.Cos(lastAngle)) * (RandomUnsignedFloat() * sectionLengthRange.difference + sectionLengthRange.min);
-            NewNode(sections[generatedSections - 1].gameObject.transform.position + change);
+            Vector3 change = new Vector3(Mathf.Sin(lastAngle), 0, Mathf.Cos(lastAngle)) * sectionLength;
+            NewNode(sections[sections.Count - 1].gameObject.transform.position + change);
         }
+        // Delete old sections
+        int deleteCount = 0;
+        foreach (SlideSection section in sections)
+        {
+            if (section.number < centerProgress - rearBufferSections)
+            {
+                deleteCount += 1;
+                Destroy(section.gameObject);
+            }
+        }
+        sections.RemoveRange(0, deleteCount);
     }
 
     GameObject NewNode(Vector3 position)
     {
         GameObject node = Instantiate(slideSectionPrefab, transform);
         node.transform.position = position;
-        sections.Add(node.GetComponent<SlideSection>());
+        SlideSection section = node.GetComponent<SlideSection>();
+        section.number = generatedSections;
+        sections.Add(section);
         generatedSections += 1;
         return node;
     }
 
+    SlideSection GetSectionAt(int d)
+    {
+        return sections[d - sections[0].number];
+    }
+
     public Vector3 GetPositionOnSlide(float d)
     {
-        Vector3 last = sections[Mathf.FloorToInt(d)].transform.position;
-        Vector3 next = sections[Mathf.CeilToInt(d)].transform.position;
+        Vector3 last = GetSectionAt(Mathf.FloorToInt(d)).transform.position;
+        Vector3 next = GetSectionAt(Mathf.CeilToInt(d)).transform.position;
         float nextWeight = d % 1;
         return last + (next - last) * nextWeight;
     }
@@ -59,11 +79,11 @@ public class SlideController : MonoBehaviour
     public float GetAngleOnSlide(float d)
     {
         int nodeNum = Mathf.RoundToInt(d);
-        if (0 < nodeNum && nodeNum < sections.Count - 1)
+        if (0 < nodeNum && nodeNum < generatedSections - 1)
         {
-            Vector3 lastNode = sections[nodeNum - 1].transform.position;
-            Vector3 closestNode = sections[nodeNum].transform.position;
-            Vector3 nextNode = sections[nodeNum + 1].transform.position;
+            Vector3 lastNode = GetSectionAt(nodeNum - 1).transform.position;
+            Vector3 closestNode = GetSectionAt(nodeNum).transform.position;
+            Vector3 nextNode = GetSectionAt(nodeNum + 1).transform.position;
 
             Vector3 lastLine = closestNode - lastNode;
             Vector3 nextLine = nextNode - closestNode;
@@ -95,18 +115,3 @@ public class SlideController : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public class Range
-{
-    [SerializeField]
-    public float min;
-    [SerializeField]
-    public float max;
-    public float difference { get { return max - min;  } }
-
-    public Range(float min, float max)
-    {
-        this.min = min;
-        this.max = max;
-    }
-}

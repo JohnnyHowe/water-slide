@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SlideSection : MonoBehaviour
 {
+    public int number;
     public Vector3 startPosition;
     public Vector3 startDirection;
     public Vector3 endPosition;
@@ -14,6 +15,11 @@ public class SlideSection : MonoBehaviour
     private void Awake()
     {
         slideSectionCube = Instantiate(slideSectionCubePrefab, transform);
+    }
+
+    public void DestroySection()
+    {
+        Destroy(gameObject);
     }
 
     public void UpdateMesh()
