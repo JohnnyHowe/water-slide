@@ -429,7 +429,7 @@ PrefabInstance:
     - target: {fileID: 6861783344059807578, guid: 1ab5c1a6484a3cf4782badc33c6ed26a,
         type: 3}
       propertyPath: speed
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6861783344059807578, guid: 1ab5c1a6484a3cf4782badc33c6ed26a,
         type: 3}
@@ -583,12 +583,12 @@ PrefabInstance:
     - target: {fileID: 9123372033566673184, guid: ee5ad12f15247ee4c9c8776196148a97,
         type: 3}
       propertyPath: maxAngle
-      value: 0.1
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9123372033566673184, guid: ee5ad12f15247ee4c9c8776196148a97,
         type: 3}
       propertyPath: sectionLength
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9123372033566673184, guid: ee5ad12f15247ee4c9c8776196148a97,
         type: 3}
@@ -614,7 +614,7 @@ PrefabInstance:
     - target: {fileID: 9123372033566673184, guid: ee5ad12f15247ee4c9c8776196148a97,
         type: 3}
       propertyPath: forwardBufferSections
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9123372033566673184, guid: ee5ad12f15247ee4c9c8776196148a97,
         type: 3}

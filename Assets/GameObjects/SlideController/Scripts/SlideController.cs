@@ -20,8 +20,7 @@ public class SlideController : MonoBehaviour
     {
         sections = new List<SlideSection>();
 
-        NewNode(Vector3.zero);
-        NewNode(Vector3.one);
+        NewNode(Vector3.zero, Vector3.forward * sectionLength, 0, 0);
         UpdateSlide();
     }
 
@@ -35,9 +34,13 @@ public class SlideController : MonoBehaviour
         // Generate new sections
         while (generatedSections < centerProgress + forwardBufferSections)
         {
-            lastAngle += maxAngle * RandomSignedFloat();
-            Vector3 change = new Vector3(Mathf.Sin(lastAngle), 0, Mathf.Cos(lastAngle)) * sectionLength;
-            NewNode(sections[sections.Count - 1].gameObject.transform.position + change);
+            Vector3 startPosition = sections[sections.Count - 1].endPosition;
+            Vector3 positionChange = new Vector3(Mathf.Sin(lastAngle), 0, Mathf.Cos(lastAngle)) * sectionLength;
+            Vector3 endPosition = startPosition + positionChange;
+            float angleChange = maxAngle * RandomSignedFloat() * Mathf.PI / 180;
+
+            NewNode(startPosition, endPosition, lastAngle, lastAngle + angleChange);
+            lastAngle += angleChange;
         }
         // Delete old sections
         int deleteCount = 0;
@@ -52,15 +55,27 @@ public class SlideController : MonoBehaviour
         sections.RemoveRange(0, deleteCount);
     }
 
-    GameObject NewNode(Vector3 position)
+    GameObject NewNode(Vector3 startPosition, Vector3 endPosition, float startAngle, float endAngle)
     {
         GameObject node = Instantiate(slideSectionPrefab, transform);
-        node.transform.position = position;
+        //node.transform.position = position;
         SlideSection section = node.GetComponent<SlideSection>();
+
         section.number = generatedSections;
+        section.startPosition = startPosition;
+        section.endPosition = endPosition;
+        section.startAngle = startAngle;
+        section.endAngle = endAngle;
+        section.UpdateMesh();
+
         sections.Add(section);
         generatedSections += 1;
         return node;
+    }
+
+    SlideSection GetSectionAt(float d)
+    {
+        return GetSectionAt(Mathf.FloorToInt(d));
     }
 
     SlideSection GetSectionAt(int d)
@@ -70,8 +85,9 @@ public class SlideController : MonoBehaviour
 
     public Vector3 GetPositionOnSlide(float d)
     {
-        Vector3 last = GetSectionAt(Mathf.FloorToInt(d)).transform.position;
-        Vector3 next = GetSectionAt(Mathf.CeilToInt(d)).transform.position;
+        SlideSection section = GetSectionAt(d);
+        Vector3 last = section.startPosition;
+        Vector3 next = section.endPosition;
         float nextWeight = d % 1;
         return last + (next - last) * nextWeight;
     }
@@ -79,22 +95,24 @@ public class SlideController : MonoBehaviour
     public float GetAngleOnSlide(float d)
     {
         int nodeNum = Mathf.RoundToInt(d);
-        if (0 < nodeNum && nodeNum < generatedSections - 1)
+        if (0 < nodeNum && nodeNum < generatedSections)
         {
-            Vector3 lastNode = GetSectionAt(nodeNum - 1).transform.position;
-            Vector3 closestNode = GetSectionAt(nodeNum).transform.position;
-            Vector3 nextNode = GetSectionAt(nodeNum + 1).transform.position;
+            SlideSection lastSection = GetSectionAt(d);
+            SlideSection nextSection = GetSectionAt(d + 1);
+
+            Vector3 lastNode = lastSection.startPosition;
+            Vector3 closestNode = lastSection.endPosition;
+            Vector3 nextNode = nextSection.endPosition;
 
             Vector3 lastLine = closestNode - lastNode;
             Vector3 nextLine = nextNode - closestNode;
 
-            float progress = (d - 0.5f) % 1;
+            float progress = (d) % 1;
 
             Vector3 p1 = lastNode + lastLine * progress;
             Vector3 p2 = closestNode + nextLine * progress;
 
             Vector3 direction = p2 - p1;
-            //return Vector3.Angle(Vector3.forward, direction);
             return Mathf.Atan2(direction.x, direction.z) * 180 / Mathf.PI;
         } else
         {

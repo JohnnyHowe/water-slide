@@ -6,9 +6,9 @@ public class SlideSection : MonoBehaviour
 {
     public int number;
     public Vector3 startPosition;
-    public Vector3 startDirection;
     public Vector3 endPosition;
-    public Vector3 endDirection;
+    public float startAngle;
+    public float endAngle;
     public GameObject slideSectionCubePrefab;
     GameObject slideSectionCube;
 
@@ -26,7 +26,8 @@ public class SlideSection : MonoBehaviour
     {
         Vector3 sectionVector = endPosition - startPosition;
 
-        float yAngle = -Vector3.Angle(sectionVector, Vector3.forward);
+        //float yAngle = -Vector3.Angle(sectionVector, Vector3.forward);
+        float yAngle = Mathf.Atan2(sectionVector.x, sectionVector.z) * 180 / Mathf.PI;
         slideSectionCube.transform.localEulerAngles = new Vector3(0, yAngle, 0);
 
         slideSectionCube.transform.localScale = new Vector3(1, 1, sectionVector.magnitude);
