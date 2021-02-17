@@ -8,21 +8,30 @@ public class Player_Movement : MonoBehaviour
     public float xMax = 3;
     public float speed = 1;
 
+    public Transform centerSphere;
+
     public Vector2 slidePosition = Vector2.zero;
 
     void FixedUpdate()
     {
         UpdateHorizontalMovement();
+
         slidePosition.y += Time.deltaTime * speed;
-        Vector3 restPosition = slideController.GetPositionOnSlide(slidePosition.y);
-        float angle = slideController.GetAngleOnSlide(slidePosition.y);
-        transform.position = restPosition;
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, angle, transform.localEulerAngles.z);
         slideController.centerProgress = slidePosition.y;
+
+        UpdateTransform();
     }
 
     void UpdateHorizontalMovement()
     {
-        slidePosition.x = (TouchInput.screenPosition.x - 0.5f) * xMax * 2;
+        //slidePosition.x = (TouchInput.screenPosition.x - 0.5f) * xMax * 2;
+    }
+
+    void UpdateTransform()
+    {
+        transform.position = slideController.GetCurrentSection(slidePosition.y).GetPositionOnSlide(slidePosition.y);
+
+        float angle = slideController.GetCurrentSection(slidePosition.y).GetAngle(slidePosition.y % 1) * 180 / Mathf.PI + 90;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
     }
 }

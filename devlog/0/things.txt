@@ -1,0 +1,8 @@
+Inital player movement
+
+3d graphics
+
+path gen
+
+movement
+ - when off center, angles weird
