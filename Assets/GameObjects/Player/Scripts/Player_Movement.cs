@@ -24,14 +24,14 @@ public class Player_Movement : MonoBehaviour
 
     void UpdateHorizontalMovement()
     {
-        //slidePosition.x = (TouchInput.screenPosition.x - 0.5f) * xMax * 2;
+        slidePosition.x = (TouchInput.screenPosition.x - 0.5f) * xMax * 2;
     }
 
     void UpdateTransform()
     {
-        transform.position = slideController.GetCurrentSection(slidePosition.y).GetPositionOnSlide(slidePosition.y);
+        //transform.position = slideController.GetCurrentSection(slidePosition.y).GetPositionOnSlide(slidePosition);
 
-        float angle = slideController.GetCurrentSection(slidePosition.y).GetAngle(slidePosition.y % 1) * 180 / Mathf.PI + 90;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+        //float angle = slideController.GetCurrentSection(slidePosition.y).GetAngle(slidePosition.y % 1) * 180 / Mathf.PI + 90;
+        //transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
     }
 }

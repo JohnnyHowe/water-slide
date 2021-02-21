@@ -322,7 +322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!120 &940122885
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -680,11 +680,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3c4239adfffff4ea7e5003430f3da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rearBufferSections: 0
-  forwardBufferSections: 5
+  forwardBufferSections: 100
   centerProgress: 0
   sectionLength: 5
-  maxAngle: 60
+  minRadius: 5
+  maxRadius: 5
   lineRenderer: {fileID: 1199326169}
   lineRenderer2: {fileID: 940122885}
 --- !u!4 &1643529083
@@ -818,7 +818,7 @@ PrefabInstance:
     - target: {fileID: 6861783344059807578, guid: 1ab5c1a6484a3cf4782badc33c6ed26a,
         type: 3}
       propertyPath: xMax
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6861783344059807578, guid: 1ab5c1a6484a3cf4782badc33c6ed26a,
         type: 3}
