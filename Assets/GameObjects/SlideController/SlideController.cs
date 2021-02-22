@@ -30,6 +30,18 @@ public class SlideController : MonoBehaviour
         return section.GetPoint(slidePosition.y % 1);
     }
 
+    public Vector3 GetDirectionOnSlide(Vector2 slidePosition)
+    {
+        SlideSection section = sections[Mathf.FloorToInt(slidePosition.y)];
+        return section.GetDirection(slidePosition.y % 1);
+    }
+
+    public float GetAngleOnSlide(Vector2 slidePosition)
+    {
+        Vector3 direction = GetDirectionOnSlide(slidePosition);
+        return -Mathf.Atan2(direction.z, direction.x) + Mathf.PI / 2;
+    }
+
     void UpdateSections()
     {
         for (int i = 0; i < forwardBufferSections - centerProgress; i++)
