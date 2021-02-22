@@ -30,6 +30,7 @@ public class Player_Movement : MonoBehaviour
     void UpdateTransform()
     {
         //transform.position = slideController.GetCurrentSection(slidePosition.y).GetPositionOnSlide(slidePosition);
+        transform.position = slideController.GetPositionOnSlide(slidePosition);
 
         //float angle = slideController.GetCurrentSection(slidePosition.y).GetAngle(slidePosition.y % 1) * 180 / Mathf.PI + 90;
         //transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);

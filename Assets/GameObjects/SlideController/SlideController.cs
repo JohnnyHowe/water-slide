@@ -21,15 +21,24 @@ public class SlideController : MonoBehaviour
     {
         sections = new List<SlideSection>();
         sections.Add(new SlideSection(Vector3.zero, Vector3.forward, 10, sectionLength));
-        for (int i = 0; i < forwardBufferSections; i++)
+        UpdateSections();
+    }
+
+    public Vector3 GetPositionOnSlide(Vector2 slidePosition)
+    {
+        SlideSection section = sections[Mathf.FloorToInt(slidePosition.y)];
+        return section.GetPoint(slidePosition.y % 1);
+    }
+
+    void UpdateSections()
+    {
+        for (int i = 0; i < forwardBufferSections - centerProgress; i++)
         {
             int sign = Mathf.RoundToInt(Random.value) * 2 - 1;
-            float radius = ((float)Random.Range(0, 1000) / 1000) * (maxRadius - minRadius) + minRadius;
-
+            float radius = (Random.Range(0, 1000) / 1000.0f) * (maxRadius - minRadius) + minRadius;
             SlideSection last = sections[sections.Count - 1];
             sections.Add(new SlideSection(last.GetPoint(1), last.GetDirection(1), radius * sign, sectionLength));
         }
-
         UpdateRenderer();
     }
 

@@ -683,8 +683,8 @@ MonoBehaviour:
   forwardBufferSections: 100
   centerProgress: 0
   sectionLength: 5
-  minRadius: 5
-  maxRadius: 5
+  minRadius: 3
+  maxRadius: 20
   lineRenderer: {fileID: 1199326169}
   lineRenderer2: {fileID: 940122885}
 --- !u!4 &1643529083
