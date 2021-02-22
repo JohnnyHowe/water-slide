@@ -680,7 +680,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3c4239adfffff4ea7e5003430f3da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardBufferSections: 100
+  rearBufferSections: 10
+  forwardBufferSections: 50
   centerProgress: 0
   sectionLength: 5
   minRadius: 3

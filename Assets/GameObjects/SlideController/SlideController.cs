@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlideController : MonoBehaviour
 {
-    //public int rearBufferSections = 2;
+    public int rearBufferSections = 2;
     public int forwardBufferSections = 10;
     public float centerProgress = 0;
     public float sectionLength = 5;
@@ -15,25 +15,26 @@ public class SlideController : MonoBehaviour
     public LineRenderer lineRenderer;
     public LineRenderer lineRenderer2;
 
+    int generatedSections = 0;
     List<SlideSection> sections;
 
     void Start()
     {
         sections = new List<SlideSection>();
         sections.Add(new SlideSection(Vector3.zero, Vector3.forward, 10, sectionLength));
+        generatedSections += 1;
         UpdateSections();
+        UpdateRenderer();
     }
 
     public Vector3 GetPositionOnSlide(Vector2 slidePosition)
     {
-        SlideSection section = sections[Mathf.FloorToInt(slidePosition.y)];
-        return section.GetPoint(slidePosition.y % 1);
+        return GetSection(slidePosition).GetPoint(slidePosition.y % 1);
     }
 
     public Vector3 GetDirectionOnSlide(Vector2 slidePosition)
     {
-        SlideSection section = sections[Mathf.FloorToInt(slidePosition.y)];
-        return section.GetDirection(slidePosition.y % 1);
+        return GetSection(slidePosition).GetDirection(slidePosition.y % 1);
     }
 
     public float GetAngleOnSlide(Vector2 slidePosition)
@@ -42,20 +43,32 @@ public class SlideController : MonoBehaviour
         return -Mathf.Atan2(direction.z, direction.x) + Mathf.PI / 2;
     }
 
+    SlideSection GetSection(Vector2 slidePosition)
+    {
+        int startIndex = generatedSections - sections.Count;
+        int index = Mathf.FloorToInt(slidePosition.y) - startIndex;
+        return sections[index];
+    }
+
     void UpdateSections()
     {
-        for (int i = 0; i < forwardBufferSections - centerProgress; i++)
+        for (int i = 0; i < centerProgress + forwardBufferSections - generatedSections; i++)
         {
             int sign = Mathf.RoundToInt(Random.value) * 2 - 1;
             float radius = (Random.Range(0, 1000) / 1000.0f) * (maxRadius - minRadius) + minRadius;
             SlideSection last = sections[sections.Count - 1];
             sections.Add(new SlideSection(last.GetPoint(1), last.GetDirection(1), radius * sign, sectionLength));
+            generatedSections += 1;
         }
-        UpdateRenderer();
+
+        int sectionsToDelete = Mathf.Max(sections.Count - (forwardBufferSections + rearBufferSections), 0);
+        sections.RemoveRange(0, sectionsToDelete);
     }
 
     private void Update()
     {
+        UpdateSections();
+        UpdateRenderer();
     }
 
     void UpdateRenderer()
