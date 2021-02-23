@@ -683,8 +683,8 @@ MonoBehaviour:
   rearBufferSections: 10
   forwardBufferSections: 50
   centerProgress: 0
-  sectionLength: 5
-  minRadius: 3
+  sectionLength: 10
+  minRadius: 10
   maxRadius: 20
   lineRenderer: {fileID: 1199326169}
   lineRenderer2: {fileID: 940122885}
@@ -819,7 +819,7 @@ PrefabInstance:
     - target: {fileID: 6861783344059807578, guid: 1ab5c1a6484a3cf4782badc33c6ed26a,
         type: 3}
       propertyPath: xMax
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6861783344059807578, guid: 1ab5c1a6484a3cf4782badc33c6ed26a,
         type: 3}

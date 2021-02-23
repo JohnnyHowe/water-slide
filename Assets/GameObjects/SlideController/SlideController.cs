@@ -29,12 +29,12 @@ public class SlideController : MonoBehaviour
 
     public Vector3 GetPositionOnSlide(Vector2 slidePosition)
     {
-        return GetSection(slidePosition).GetPoint(slidePosition.y % 1);
+        return GetSection(slidePosition).GetPoint(slidePosition);
     }
 
     public Vector3 GetDirectionOnSlide(Vector2 slidePosition)
     {
-        return GetSection(slidePosition).GetDirection(slidePosition.y % 1);
+        return GetSection(slidePosition).GetDirection(slidePosition);
     }
 
     public float GetAngleOnSlide(Vector2 slidePosition)
@@ -57,7 +57,7 @@ public class SlideController : MonoBehaviour
             int sign = Mathf.RoundToInt(Random.value) * 2 - 1;
             float radius = (Random.Range(0, 1000) / 1000.0f) * (maxRadius - minRadius) + minRadius;
             SlideSection last = sections[sections.Count - 1];
-            sections.Add(new SlideSection(last.GetPoint(1), last.GetDirection(1), radius * sign, sectionLength));
+            sections.Add(new SlideSection(last.endPoint, last.endDirection, radius * sign, sectionLength));
             generatedSections += 1;
         }
 
@@ -95,6 +95,8 @@ class SlideSection
 {
     Vector3 start;
     Vector3 origin;
+    public Vector3 endPoint;
+    public Vector3 endDirection;
     float radius;
     float length;
 
@@ -105,10 +107,29 @@ class SlideSection
         this.length = length;
 
         this.origin = start + new Vector3(lastDir.z, 0, -lastDir.x).normalized * radius;
+        endPoint = GetPointNoOffset(1);
+        endDirection = GetDirection(1);
     }
 
     public Vector3 GetPoint(float d)
     {
+        return GetPoint(new Vector2(0, d));
+    }
+
+    public Vector3 GetPoint(Vector2 slidePosition)
+    {
+        Vector3 point = GetPointNoOffset(slidePosition.y);
+        Vector3 direction = GetDirection(slidePosition);
+        Vector3 normal = new Vector3(direction.z, 0, -direction.x);
+        return point + normal.normalized * slidePosition.x;
+    }
+
+    private Vector3 GetPointNoOffset(float d)
+    {
+        if (d > 1)
+        {
+            d = d % 1;
+        }
         float angle = d * (length / radius);
 
         float ox = origin.x;
@@ -124,7 +145,12 @@ class SlideSection
 
     public Vector3 GetDirection(float d)
     {
-        Vector3 point = GetPoint(d);
+        return GetDirection(new Vector2(0, d));
+    }
+
+    public Vector3 GetDirection(Vector2 slidePosition)
+    {
+        Vector3 point = GetPointNoOffset(slidePosition.y);
         Vector3 perp = origin - point;
 
         if (radius < 0)
