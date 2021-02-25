@@ -20,12 +20,9 @@ public class SlideController : MonoBehaviour
     void Start()
     {
         sections = new List<SlideSection>();
-        //sections.Add(new SlideSection(Vector3.zero, Vector3.forward, 10, sectionLength));
-
         SlideSection section = Instantiate(slideSectionPrefab, transform).GetComponent<SlideSection>();
         section.Init(Vector3.zero, Vector3.forward, 10, sectionLength);
         sections.Add(section);
-
         generatedSections += 1;
         UpdateSections();
     }
