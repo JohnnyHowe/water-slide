@@ -10,6 +10,8 @@ public class SlideSection_MeshDeformer : MonoBehaviour
 	public SlideSection section;
 	public GameObject meshObj;
 	public Vector3 centerPos;
+	public Vector3 scale = Vector3.one;
+
     Mesh deformingMesh;
 	Vector3[] originalVertices, displacedVertices;
 
@@ -58,16 +60,26 @@ public class SlideSection_MeshDeformer : MonoBehaviour
 			scaledVertex.y /= sizeChange.y;
 			scaledVertex.z /= sizeChange.z;
 
+			scaledVertex.x -= 0.5f;
+			scaledVertex.y -= 0.5f;
+
+			scaledVertex.x *= scale.x;
+			scaledVertex.y *= scale.y;
+			scaledVertex.z *= scale.z;
+
 			scaledVertices[i] = scaledVertex;
         }
 
+		// Deform
 		Vector3[] rotatedVertices = new Vector3[scaledVertices.Length];
 		for (int i = 0; i < originalVertices.Length; i ++)
         {
-			Vector3 scaledPoint = scaledVertices[i];
-			Vector3 point = section.GetPoint(new Vector2(scaledPoint.x, scaledPoint.z));
+            Vector3 scaledPoint = scaledVertices[i];
+            Vector3 point = section.GetPoint(new Vector2(scaledPoint.x, scaledPoint.z));
 			point.y = scaledPoint.y;
-			rotatedVertices[i] = point - centerPos;
+
+			Vector3 deformedPoint = point - centerPos;
+			rotatedVertices[i] = deformedPoint;
         }
 
 		displacedVertices = rotatedVertices;

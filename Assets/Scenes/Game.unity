@@ -424,12 +424,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3c4239adfffff4ea7e5003430f3da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rearBufferSections: 5
-  forwardBufferSections: 50
+  rearBufferSections: 2
+  forwardBufferSections: 7
   centerProgress: 0
-  sectionLength: 10
-  minRadius: 10
-  maxRadius: 20
+  sectionLength: 50
+  minRadius: 60
+  maxRadius: 100
   slideSectionPrefab: {fileID: 7336592429752734578, guid: d428973b0543f7b45bacccf83d051091,
     type: 3}
 --- !u!4 &1643529083
