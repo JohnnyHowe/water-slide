@@ -21,7 +21,7 @@ public class SlideController : MonoBehaviour
     {
         sections = new List<SlideSection>();
         SlideSection section = Instantiate(slideSectionPrefab, transform).GetComponent<SlideSection>();
-        section.Init(Vector3.zero, Vector3.forward, 10, sectionLength);
+        section.Init(Vector3.zero, Vector3.forward, maxRadius, sectionLength);
         sections.Add(section);
         generatedSections += 1;
         UpdateSections();
@@ -77,23 +77,5 @@ public class SlideController : MonoBehaviour
     {
         UpdateSections();
     }
-
-    //void UpdateRenderer()
-    //{
-    //    List<Vector3> pts = new List<Vector3>();
-    //    int accuracy = 20;
-    //    foreach (SlideSection section in sections)
-    //    {
-    //        for (int i = 0; i < accuracy; i ++)
-    //        {
-    //            pts.Add(section.GetPoint(i * 1.0f / accuracy));
-    //        }
-    //    }
-    //    lineRenderer.positionCount = pts.Count;
-    //    for (int i = 0; i < pts.Count; i ++)
-    //    {
-    //        lineRenderer.SetPosition(i, pts[i]);
-    //    }
-    //}
 }
 

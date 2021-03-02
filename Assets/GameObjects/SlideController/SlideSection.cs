@@ -10,6 +10,8 @@ public class SlideSection : MonoBehaviour
     public Vector3 endDirection;
     float radius;
     float length;
+	public Vector2 scale = Vector2.one;
+    public Vector2 insideScale = Vector2.one;
 
     public void Init(Vector3 start, Vector3 lastDir, float radius, float length)
     {
@@ -31,8 +33,26 @@ public class SlideSection : MonoBehaviour
     {
         Vector3 point = GetPointNoOffset(slidePosition.y);
         Vector3 direction = GetDirection(slidePosition);
-        Vector3 normal = new Vector3(direction.z, 0, -direction.x);
-        return point + normal.normalized * slidePosition.x;
+
+        Vector3 normal = new Vector3(direction.z, 0, -direction.x).normalized;
+
+        float y = -insideScale.y * Mathf.Sqrt(1 - Mathf.Pow((float) slidePosition.x, 2));
+        Vector3 verticalOffset = Vector3.up * (y + insideScale.y);
+
+        Vector3 horizontalOffset = normal * slidePosition.x * insideScale.x * 0.5f;
+
+        return point + horizontalOffset + verticalOffset ;
+    }
+
+    public Vector3 GetFlatPoint(Vector2 slidePosition)
+    {
+        Vector3 point = GetPointNoOffset(slidePosition.y);
+        Vector3 direction = GetDirection(slidePosition);
+
+        Vector3 normal = new Vector3(direction.z, 0, -direction.x).normalized;
+        Vector3 horizontalOffset = normal * slidePosition.x;
+
+        return point + horizontalOffset;
     }
 
     private Vector3 GetPointNoOffset(float d)

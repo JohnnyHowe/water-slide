@@ -128,6 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   endPoint: {x: 0, y: 0, z: 0}
   endDirection: {x: 0, y: 0, z: 0}
+  scale: {x: 30, y: 10}
+  insideScale: {x: 26, y: 16}
 --- !u!114 &5626263423421016331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +145,6 @@ MonoBehaviour:
   section: {fileID: -5075613722782793307}
   meshObj: {fileID: 3785424662352391686}
   centerPos: {x: 0, y: 0, z: 0}
-  scale: {x: 30, y: 10, z: 1}
 --- !u!114 &2235443753913330893
 MonoBehaviour:
   m_ObjectHideFlags: 0
